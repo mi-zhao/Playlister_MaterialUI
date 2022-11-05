@@ -125,6 +125,14 @@ body {
   font-size: 36pt;
 }
 
+#homebutton, #loggedin {
+  z-index: 2;
+}
+
+#accountbutton {
+  z-index: 1;
+}
+
 #list-selector-heading {
   position: absolute;
   left: 0%;

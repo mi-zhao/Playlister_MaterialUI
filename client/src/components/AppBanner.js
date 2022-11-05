@@ -21,6 +21,7 @@ export default function AppBanner() {
     const isMenuOpen = Boolean(anchorEl);
 
     const handleProfileMenuOpen = (event) => {
+        console.log("anchor:", event.currentTarget)
         setAnchorEl(event.currentTarget);
     };
 
@@ -75,7 +76,9 @@ export default function AppBanner() {
 
     let editToolbar = "";
     let menu = loggedOutMenu;
+    console.log("logged out menu:", loggedOutMenu)
     if (auth.loggedIn) {
+        console.log("menu:", loggedInMenu)
         menu = loggedInMenu;
         if (store.currentList) {
             editToolbar = <EditToolbar />;
@@ -86,7 +89,7 @@ export default function AppBanner() {
         let userInitials = auth.getUserInitials();
         console.log("userInitials: " + userInitials);
         if (loggedIn) 
-            return <div>{userInitials}</div>;
+            return <div id="loggedin">{userInitials}</div>;
         else
             return <AccountCircle />;
     }
@@ -95,7 +98,7 @@ export default function AppBanner() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography                        
+                    <Typography id="homebutton"                       
                         variant="h4"
                         noWrap
                         component="div"
@@ -105,7 +108,7 @@ export default function AppBanner() {
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton
+                        <IconButton id="accountbutton"
                             size="large"
                             edge="end"
                             aria-label="account of current user"
