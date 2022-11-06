@@ -320,7 +320,7 @@ function GlobalStoreContextProvider(props) {
     }
     store.unmarkListForDeletion = function () {
         storeReducer({
-            type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
+            type: GlobalStoreActionType.SET_CURRENT_LIST,
             payload: {}
         });
         store.hideModals();
@@ -337,7 +337,7 @@ function GlobalStoreContextProvider(props) {
     }
     store.deleteMarkedList = function() {
         store.deleteList(store.listIdMarkedForDeletion);
-        store.hideModals();
+        store.unmarkListForDeletion();
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
