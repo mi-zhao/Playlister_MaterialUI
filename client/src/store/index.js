@@ -318,7 +318,7 @@ function GlobalStoreContextProvider(props) {
         }
         getListToDelete(id);
     }
-    store.unmarkListForDeletion = function (id) {
+    store.unmarkListForDeletion = function () {
         storeReducer({
             type: GlobalStoreActionType.MARK_LIST_FOR_DELETION,
             payload: {}

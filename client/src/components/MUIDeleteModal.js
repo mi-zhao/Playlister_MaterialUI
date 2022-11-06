@@ -8,12 +8,13 @@ const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
+    textAlign: 'center',
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: '1px solid #000',
     boxShadow: 24,
-    p: 4,
+    p: 0,
 };
 
 export default function MUIDeleteModal() {
@@ -36,7 +37,7 @@ export default function MUIDeleteModal() {
             <Box sx={style}>
                 <div className="modal-dialog">
                 <header className="dialog-header">
-                    Delete the {name} Top 5 List?
+                    Delete the {name} Playlist?
                 </header>
                 <div id="confirm-cancel-container">
                     <button

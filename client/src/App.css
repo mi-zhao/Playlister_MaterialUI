@@ -295,6 +295,11 @@ input {
   opacity: 1;
 }
 
+.is-visible {
+  visibility: visible;
+  opacity: 1;
+}
+
 .modal-dialog {
   position: relative;
   max-width: 800px;
