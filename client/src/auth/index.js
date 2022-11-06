@@ -12,7 +12,7 @@ export const AuthActionType = {
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
-    REGISTER_USER_FAILED: "REGISTER_USER_FAILED",
+    ACCOUNT_USER_FAILED: "ACCOUNT_USER_FAILED",
 }
 
 function AuthContextProvider(props) {
@@ -63,7 +63,7 @@ function AuthContextProvider(props) {
                     errormessage: null,
                 })
             }
-            case AuthActionType.REGISTER_USER_FAILED: {
+            case AuthActionType.ACCOUNT_USER_FAILED: {
                 return setAuth({
                     user: null,
                     loggedIn: false,
@@ -82,7 +82,7 @@ function AuthContextProvider(props) {
     
     auth.removeError = function() {
         authReducer({
-            type: AuthActionType.REGISTER_USER_FAILED,
+            type: AuthActionType.ACCOUNT_USER_FAILED,
             payload: {
                 error: false
             }
@@ -119,27 +119,40 @@ function AuthContextProvider(props) {
             console.log(exception.response)
             if (exception.response.status === 400) {
                 authReducer({
-                    type: AuthActionType.REGISTER_USER_FAILED,
+                    type: AuthActionType.ACCOUNT_USER_FAILED,
                     payload: {
                         error: true,
                         errormessage: errmsg
                     }
                 });
             }
-            // else if (errmsg === )
         }
     }
 
     auth.loginUser = async function(email, password) {
-        const response = await api.loginUser(email, password);
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/");
+        try {
+            const response = await api.loginUser(email, password);
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+            }
+        } catch (exception) {
+            let errmsg = exception.response.data.errorMessage
+            console.log(exception.response)
+            if (exception.response.status === 400 || exception.response.status === 401) {
+                authReducer({
+                    type: AuthActionType.ACCOUNT_USER_FAILED,
+                    payload: {
+                        error: true,
+                        errormessage: errmsg
+                    }
+                });
+            }
         }
     }
 
