@@ -291,6 +291,19 @@ input {
   opacity: 1;
 }
 
+.modal-north {
+  font-size: 24pt;
+}
+
+.modal-center-content {
+  font-size: 18pt;
+}
+
+.modal-prompt {
+  font-size: 18pt;
+  margin-top: 10pt;
+}
+
 .modal-dialog {
   position: relative;
   max-width: 800px;
