@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom'
+import MUIAlerts from "../components/MUIAlerts";
 import api from './auth-request-api'
 
 const AuthContext = createContext();
@@ -10,13 +11,16 @@ export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
-    REGISTER_USER: "REGISTER_USER"
+    REGISTER_USER: "REGISTER_USER",
+    REGISTER_USER_FAILED: "REGISTER_USER_FAILED",
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
-        loggedIn: false
+        loggedIn: false,
+        error: false,
+        errormessage: null,
     });
     const history = useHistory();
 
@@ -30,30 +34,59 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: payload.loggedIn
+                    loggedIn: payload.loggedIn,
+                    error: false,
+                    errormessage: null,
                 });
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    error: false,
+                    errormessage: null,
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
-                    loggedIn: false
+                    loggedIn: false,
+                    error: false,
+                    errormessage: null,
                 })
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    error: false,
+                    errormessage: null,
+                })
+            }
+            case AuthActionType.REGISTER_USER_FAILED: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    error: payload.error,
+                    errormessage: payload.errormessage
                 })
             }
             default:
                 return auth;
         }
+    }
+
+    auth.isError = function() {
+        return auth.error;
+    }
+    
+    auth.removeError = function() {
+        authReducer({
+            type: AuthActionType.REGISTER_USER_FAILED,
+            payload: {
+                error: false
+            }
+        });
     }
 
     auth.getLoggedIn = async function () {
@@ -63,22 +96,37 @@ function AuthContextProvider(props) {
                 type: AuthActionType.SET_LOGGED_IN,
                 payload: {
                     loggedIn: response.data.loggedIn,
-                    user: response.data.user
+                    user: response.data.user,
                 }
             });
         }
     }
 
     auth.registerUser = async function(firstName, lastName, email, password, passwordVerify) {
-        const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.REGISTER_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/");
+        try {
+            const response = await api.registerUser(firstName, lastName, email, password, passwordVerify);      
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+            }
+        } catch (exception) {
+            let errmsg = exception.response.data.errorMessage
+            console.log(exception.response)
+            if (exception.response.status === 400) {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER_FAILED,
+                    payload: {
+                        error: true,
+                        errormessage: errmsg
+                    }
+                });
+            }
+            // else if (errmsg === )
         }
     }
 
@@ -121,6 +169,8 @@ function AuthContextProvider(props) {
             auth
         }}>
             {props.children}
+  
+        <MUIAlerts />
         </AuthContext.Provider>
     );
 }

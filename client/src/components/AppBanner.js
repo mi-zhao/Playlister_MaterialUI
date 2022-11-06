@@ -21,7 +21,6 @@ export default function AppBanner() {
     const isMenuOpen = Boolean(anchorEl);
 
     const handleProfileMenuOpen = (event) => {
-        console.log("anchor:", event.currentTarget)
         setAnchorEl(event.currentTarget);
     };
 
@@ -76,9 +75,7 @@ export default function AppBanner() {
 
     let editToolbar = "";
     let menu = loggedOutMenu;
-    console.log("logged out menu:", loggedOutMenu)
     if (auth.loggedIn) {
-        console.log("menu:", loggedInMenu)
         menu = loggedInMenu;
         if (store.currentList) {
             editToolbar = <EditToolbar />;
