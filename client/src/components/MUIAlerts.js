@@ -7,8 +7,6 @@ import Modal from '@mui/material/Modal';
 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
