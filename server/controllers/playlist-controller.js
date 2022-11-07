@@ -26,6 +26,14 @@ createPlaylist = (req, res) => {
 
     User.findOne({ _id: req.userId }, (err, user) => {
         console.log("user found: " + JSON.stringify(user));
+        console.log("user trying to access: ",user.email)
+        console.log("target user: ", body.ownerEmail)
+        if (user.email != body.ownerEmail) {
+            return res.status(400).json({
+                success: false,
+                errorMessage: "You cannot edit someone's playlist!"
+            })
+        }
         user.playlists.push(playlist._id);
         user
             .save()
